@@ -1,5 +1,3 @@
-ml_logic/baseline_model.keras
-
 # Standard python ignores
 *.egg-info
 .coverage
