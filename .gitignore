@@ -28,6 +28,7 @@ data/
 
 # Saved models
 models/
+*.keras
 *.joblib
 *.h5
 
