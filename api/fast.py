@@ -1,5 +1,6 @@
 from fastapi import FastAPI, File, UploadFile
 from tensorflow.keras.models import load_model
+from io import BytesIO
 import numpy as np
 import json
 from tensorflow.keras.preprocessing import image
@@ -7,10 +8,11 @@ import uvicorn
 
 app = FastAPI()
 
+absolute_path = "/home/vinodha/code/CptSAmerica/Space_Gem/raw_data/model_v2_1.keras"
 # Load the model from the .keras file shared by Jerome
-absolute_path = "model_v2_1.keras"
+#absolute_path = "model_v2_1.keras"
 model = load_model(absolute_path)
-model.summary()
+#model.summary()
 
 # Preprocessing function for the uploaded image
 def preprocess_image(image_bytes):
@@ -36,6 +38,10 @@ def get_gemstone_label(image_bytes):
     # Using gemstone_classes list
     predicted_label = gemstone_classes[predicted_class_index]
     return predicted_label
+
+@app.get("/")
+def index():
+    return {"status": "ok"}
 
 # the prediction API endpoint
 @app.post("/predict/")
