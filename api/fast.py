@@ -1,5 +1,6 @@
 from fastapi import FastAPI, File, UploadFile
 from tensorflow.keras.models import load_model
+import os
 from io import BytesIO
 import numpy as np
 import json
@@ -8,7 +9,11 @@ import uvicorn
 
 app = FastAPI()
 
-absolute_path = "/home/vinodha/code/CptSAmerica/Space_Gem/raw_data/model_v2_1.keras"
+model_path = os.path.dirname(os.path.dirname(__file__))
+absolute_path = os.path.join(model_path, "raw_data", "model_v2_1.keras")
+
+
+#absolute_path = "/home/vinodha/code/CptSAmerica/Space_Gem/raw_data/model_v2_1.keras"
 # Load the model from the .keras file shared by Jerome
 #absolute_path = "model_v2_1.keras"
 model = load_model(absolute_path)
@@ -23,7 +28,7 @@ def preprocess_image(image_bytes):
     return img_array
 
 # Load gemstone classes from the JSON file
-json_path = "/home/vinodha/code/CptSAmerica/Space_Gem/notebooks/gemstone_classes.json"
+json_path = os.path.join(model_path, "raw_data", "gemstone_classes.json")
 
 with open(json_path, "r") as f:
     gemstone_classes = json.load(f)
