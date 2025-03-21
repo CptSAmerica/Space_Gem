@@ -1,3 +1,6 @@
+os
+typing
+
 wheel
 nbresult
 colorama
