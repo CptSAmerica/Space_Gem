@@ -15,7 +15,7 @@ FROM python:3.10.6-buster
 ####### 👇 OPTIMIZED SOLUTION (x86)👇 #######
 
 # tensorflow base-images are optimized: lighter than python-buster + pip install tensorflow
-FROM tensorflow/tensorflow:2.17.1
+#FROM tensorflow/tensorflow:2.17.1
 # OR for apple silicon, use this base image, but it's larger than python-buster + pip install tensorflow
 # FROM armswdev/tensorflow-arm-neoverse:r22.09-tf-2.10.0-eigen
 
@@ -25,11 +25,13 @@ WORKDIR /app
 #COPY requirements_prod.txt requirements.txt
 #RUN pip install --no-cache-dir -r requirements.txt
 
-COPY requirements.txt /app/
+COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 #COPY taxifare taxifare
-COPY . /app
+COPY space_gem space_gem
+COPY raw_data raw_data
+COPY api api
 
 CMD uvicorn api.fast:app --host 0.0.0.0 --port $PORT
 # $DEL_END
