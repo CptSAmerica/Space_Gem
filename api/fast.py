@@ -13,7 +13,7 @@ from ultralytics import YOLO
 app = FastAPI()
 
 model_path = os.path.dirname(os.path.dirname(__file__))
-absolute_path = os.path.join(model_path, "raw_data", "model_v2_3.keras")
+absolute_path = os.path.join(model_path, "models", "model_v2_3.keras")
 #absolute_path = os.path.join(model_path, "raw_data", "model_v2_1.keras")
 
 #absolute_path = "/home/vinodha/code/CptSAmerica/Space_Gem/raw_data/model_v2_225.keras"
@@ -53,14 +53,8 @@ def get_gemstone_label(image_bytes):
 def index():
     return {"status": "ok"}
 
-# the prediction API endpoint
 @app.post("/predict/")
-def predict(img):
-    predicted_label = get_gemstone_label(img)  # Get predicted gemstone label
-    return {"predicted_gemstone": predicted_label}
-
-
-async def pred_yolo(file: UploadFile = File(...)):
+async def predict(file: UploadFile = File(...)):
     """
     We call this function first.
     It predicts objects in an image from a file.
@@ -68,12 +62,22 @@ async def pred_yolo(file: UploadFile = File(...)):
     the second model is being called.
     """
 
+    space_path = os.path.dirname(os.path.dirname(__file__))
+    model_path = os.path.join(space_path, "models", "best.onnx")
+
+    img_path= os.path.join(space_path, "raw_data", 'input_image.jpg')
+    with open(img_path, "wb") as buffer:
+        buffer.write(await file.read())
+
+    with open(img_path, "rb") as buffer:
+        model_image_file = buffer.read()
+
     try:
         # Load the exported ONNX model
-        onnx_model = YOLO("../models/best.onnx")
+        onnx_model = YOLO(model_path)
 
         # Run inference
-        results = onnx_model(file)
+        results = onnx_model(img_path)
 
         # Count how many gems of each category appear
         detections = results[0].boxes.data.tolist()
@@ -102,7 +106,7 @@ async def pred_yolo(file: UploadFile = File(...)):
             results[0].show()
             return count_dict
         else:
-            predicted_label = get_gemstone_label(file)
+            predicted_label = get_gemstone_label(model_image_file)
             return predicted_label
 
     except requests.exceptions.RequestException as e:
@@ -111,3 +115,9 @@ async def pred_yolo(file: UploadFile = File(...)):
         print(f"Error determining image format: {e}")
     except Exception as e:
         print(f"An error occurred: {e}")
+
+
+'''if __name__ == '__main__':
+    file_path = os.path.dirname(__file__)
+    predic = pred_yolo (os.path.join(file_path, 'alexandrite_18.jpg'))
+    print(predic)'''
