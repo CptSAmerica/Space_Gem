@@ -6,6 +6,9 @@ import numpy as np
 import json
 from tensorflow.keras.preprocessing import image
 import uvicorn
+import requests
+from ultralytics import YOLO
+
 
 app = FastAPI()
 
@@ -52,7 +55,59 @@ def index():
 
 # the prediction API endpoint
 @app.post("/predict/")
-async def predict(file: UploadFile = File(...)):
-    img = await file.read()  # Get the image bytes from the uploaded file
+def predict(img):
     predicted_label = get_gemstone_label(img)  # Get predicted gemstone label
     return {"predicted_gemstone": predicted_label}
+
+
+async def pred_yolo(file: UploadFile = File(...)):
+    """
+    We call this function first.
+    It predicts objects in an image from a file.
+    If multiple gems are recognized,
+    the second model is being called.
+    """
+
+    try:
+        # Load the exported ONNX model
+        onnx_model = YOLO("../models/best.onnx")
+
+        # Run inference
+        results = onnx_model(file)
+
+        # Count how many gems of each category appear
+        detections = results[0].boxes.data.tolist()
+
+        count_dict = {'Ruby': 0, 'Amethyst': 0, 'Diamond': 0, 'Emerald': 0, 'Sapphire': 0}
+        for detection in detections:
+            # The last element in each detection list is the class ID
+            class_id = int(detection[-1])
+
+            if class_id == 0:
+                count_dict['Ruby'] += 1
+            elif class_id == 1:
+                count_dict['Amethyst'] += 1
+            elif class_id == 2:
+                count_dict['Diamond'] += 1
+            elif class_id == 3:
+                count_dict['Emerald'] += 1
+            elif class_id == 4:
+                count_dict['Sapphire'] += 1
+
+        # Counting amout of recognized gems
+        gem_count = (count_dict['Ruby'] + count_dict['Amethyst']
+        + count_dict['Diamond'] + count_dict['Emerald'] + count_dict['Sapphire'])
+
+        if gem_count > 1:
+            results[0].show()
+            return count_dict
+        else:
+            predicted_label = get_gemstone_label(file)
+            return predicted_label
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error downloading image: {e}")
+    except ValueError as e:
+        print(f"Error determining image format: {e}")
+    except Exception as e:
+        print(f"An error occurred: {e}")

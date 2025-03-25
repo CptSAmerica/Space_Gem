@@ -47,3 +47,5 @@ pytest-asyncio
 
 python-multipart
 pillow
+
+BytesIO
