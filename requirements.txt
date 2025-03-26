@@ -1,5 +1,7 @@
 typing
 
+ultralytics
+
 wheel
 nbresult
 colorama
@@ -47,5 +49,3 @@ pytest-asyncio
 
 python-multipart
 pillow
-
-BytesIO
