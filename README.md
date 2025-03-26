@@ -1,64 +1,31 @@
 Project Overview
-Project Name: Spacegem (Space Gemstone Classifier)
+Project Name: Spacegem (Gemstone Classifier)
 
 # Space Gem 🚀
-**Space Gem** is a machine learning-powered gemstone classification app that leverages Convolutional Neural Networks (CNN) and the YOLO model to predict and identify various types of gemstones from images. It offers a user-friendly interface to upload gemstone images, analyze them, and get gemstone predictions in real-time.
+**Space Gem** is a computer vision gemstone classification app that leverages Convolutional Neural Networks (CNN) and the YOLO model to predict and identify various types of gemstones from images. It offers a user-friendly interface to upload gemstone images and get them recognized in real-time.
 
 
 ## Table of Contents
 
 1. [Project Overview](#project-overview)
-2. [Installation Instructions](#installation-instructions)
-3. [API Usage](#api-usage)
-4. [Model Details](#model-details)
-5. [Frontend Usage](#frontend-usage)
-6. [Project Structure](#project-structure)
-7. [Data Security](#data-security)
-8. [Credits](#credits)
+2. [API Usage](#api-usage)
+3. [Model Details](#model-details)
+4. [Frontend Usage](#frontend-usage)
+5. [Project Structure](#project-structure)
+6. [Data Security](#data-security)
+7. [Credits](#credits)
 
 ## Project Overview
 
 Space Gem uses a **YOLO model** to identify and count gemstones in an uploaded image. When only one gemstone is recognized, a **CNN model** is used for classification. The YOLO model recognizes five types of gemstones, while the CNN model supports 87 gemstone classifications. The app provides a detailed prediction along with a description of the gemstone through OpenAPI integration.
 
 - **Frontend**: Developed with **Streamlit** for easy interaction.
-- **Backend**: Uses **FastAPI** and **YOLO** for prediction.
-- **Training Data**: Sourced from Kaggle (link will be updated).
+- **Backend**: Uses **CNN** and **YOLO** for prediction.
+- **Training Data**:
+    Sourced from Kaggle data set: `[Link](https://www.kaggle.com/datasets/lsind18/gemstones-images)`, Roboflow data set: `[Link](https://universe.roboflow.com/val-hphzo/gemstones-2e1jx/dataset/6)`
 
-## Installation Instructions
 
-To set up the Space Gem app on your local machine:
-
-### Prerequisites
-Ensure you have the following tools installed:
-
-- **Python 3.7+**
-- **Docker** (for containerization)
-- **Streamlit** for frontend deployment
-- **FastAPI** for backend API
-
-### Steps
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-repo/spacegem.git
-   cd spacegem
-
-2. Install dependencies:
-```bash
-pip install -r requirements.txt
- ```
-
-3. Run the backend FastAPI app:
- ``` bash
- uvicorn api.fast:app --reload
-  ```
-
-4. Start the frontend using Streamlit:
-``` bash
-streamlit run space_gem/app.py
-```
-
-### API Usage
+## API Usage
 The Space Gem API is built using FastAPI and can be accessed by sending an image via a POST request.
 
 ### Endpoint
@@ -92,7 +59,6 @@ You can test the API by uploading an image through the Streamlit frontend, which
 ### CNN Model:
 - Classifies 87 types of gemstones.
 - Based on a convolutional neural network, fine-tuned for gemstone classification.
--Both models were trained using data sourced from Kaggle. (Kaggle dataset URL).
 
 ## Frontend Usage
 1. Upload an Image: Visit the frontend interface built with Streamlit. Upload an image containing gemstones.
@@ -112,7 +78,7 @@ SPACE_GEM/
 │
 ├── notebooks/                   # Jupyter notebooks for model training and testing
 │   ├── baseline-model.ipynb     # Baseline model notebook
-│   ├── model_v2_1.keras         # Trained CNN model version 1
+│   ├── model_v2_3.keras         # Trained CNN model version 3
 │   └── ...
 │
 ├── raw_data/                    # Raw image data for training
@@ -141,4 +107,4 @@ Images uploaded by users are processed in memory and not stored on the server to
 Vinodha Ravichandran
 Github username: Vinodhabiz
 
-Special thanks to the Kaggle community for the dataset.
+Special thanks to the Kaggle and Roboflow community for the dataset.
