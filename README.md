@@ -93,7 +93,6 @@ main/
 ├── Dockerfile                             # Docker container setup for the project
 ├── Makefile                               # Build automation file (for setting up project tasks)
 ├── README.md                              # Project README (this file)
-├── README_backup.md                       # Backup of the original README file
 └── requirements.txt                       # Python dependencies for the project
 
 ```
