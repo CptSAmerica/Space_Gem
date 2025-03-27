@@ -14,21 +14,14 @@ app = FastAPI()
 
 model_path = os.path.dirname(os.path.dirname(__file__))
 absolute_path = os.path.join(model_path, "models", "model_v2_3.keras")
-#absolute_path = os.path.join(model_path, "raw_data", "model_v2_1.keras")
 
-#absolute_path = "/home/vinodha/code/CptSAmerica/Space_Gem/raw_data/model_v2_225.keras"
-# Load the model from the .keras file shared by Jerome
-#absolute_path = "model_v2_225.keras"
 model = load_model(absolute_path)
-#model.summary()
 
 # Preprocessing function for the uploaded image
 def preprocess_image(image_bytes):
-    #img = image.load_img(BytesIO(image_bytes), target_size=(225, 225))
     img = image.load_img(BytesIO(image_bytes), target_size=(225, 225))
     img_array = image.img_to_array(img)
-    #img_array = img_array / 255.0  # Normalize pixel values
-    img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension (1, 225, 225, 3)
+    img_array = np.expand_dims(img_array, axis=0)
     return img_array
 
 # Load gemstone classes from the JSON file
@@ -115,9 +108,3 @@ async def predict(file: UploadFile = File(...)):
         print(f"Error determining image format: {e}")
     except Exception as e:
         print(f"An error occurred: {e}")
-
-
-'''if __name__ == '__main__':
-    file_path = os.path.dirname(__file__)
-    predic = pred_yolo (os.path.join(file_path, 'alexandrite_18.jpg'))
-    print(predic)'''
